@@ -64,7 +64,7 @@ ls -lh .
 
 ## Examples
 
-### Use the data package with the RAVEN CLI
+### Using the data package with the RAVEN CLI
 
 **NOTE** this example uses UNIX shell syntax. It will not work on Windows unless adapted to the specific shell (e.g. Powershell) being used.
 **TODO**: must be tested
@@ -74,4 +74,28 @@ path_to_data_package="$(dispatches-data-packages synthetic_price)"
 # copy contents to local directory
 cp -r "$path_to_data_package"/* .
 raven_framework ARMA_train.xml
+```
+
+### Using the data package with shell commands in IPython/Jupyter notebooks
+
+Both the IPython shell and Jupyter notebooks allow running arbitrary shell commands within a Python code shell by prefixing the command with `!`.
+Refer to the [IPython documentation](https://ipython.readthedocs.io/en/stable/interactive/python-ipython-diff.html#shell-assignment) for details.
+
+**NOTE** The command (minus the `!` prefix) is passed verbatim to the system shell. Therefore, the exact syntax used in these examples may or may not work depending on the operating system (more specifically, on which shell is configured as the default).
+
+Within a `!`-prefixed line, the use of Python variables is supported by prefixing the variable name with `$` or wrapping it between `{}`.
+The _value_ of the Python variable will be converted to a string automatically before the command is passed to the shell.
+
+Therefore, the following syntax can be used to use data packages within a IPython/Jupyter shell command:
+
+```py
+from dispatches_data.api import path
+
+xml_path = path("synthetic_price", "ARMA_train.xml)
+
+# the $ syntax only supports simple variable names
+!raven_framework $xml_path
+
+# the {} syntax supports arbitrary Python expressions
+!raven_framework {path("synthetic_price", "ARMA_train.xml")}
 ```
